@@ -1,4 +1,7 @@
 # Changelog
 
+## 1.0.1
+- Added interface support for WoW Forever 1.60.1.
+
 ## 1.0.0
 - Initial release.
