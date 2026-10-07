@@ -1,0 +1,70 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+  pull_request: {}
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    name: Validate addon
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install LuaJIT and archive tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luajit unzip zip
+
+      - name: Syntax check Lua files
+        run: luajit -e 'assert(loadfile(arg[1]))' GroupGuard.lua
+
+      - name: Validate manifest
+        run: bash tests/validate_toc.sh
+
+      - name: Verify package shape
+        run: |
+          set -euo pipefail
+          package_parent="$(mktemp -d)"
+          package_root="$package_parent/GroupGuard"
+          mkdir -p "$package_root"
+          cp GroupGuard.toc GroupGuard.lua README.md "$package_root/"
+          (cd "$package_parent" && zip -qr GroupGuard.zip GroupGuard)
+          unzip -Z1 "$package_parent/GroupGuard.zip" | grep -Fx 'GroupGuard/GroupGuard.toc'
+          if unzip -Z1 "$package_parent/GroupGuard.zip" | grep -q '^GroupGuard/GroupGuard/GroupGuard.toc$'; then
+            echo 'Nested addon directory detected'
+            exit 1
+          fi
+
+  release:
+    name: Release to CurseForge and GitHub
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check CurseForge publishing settings
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+        run: |
+          test -n "$CF_API_KEY" || { echo "::error::Set the CF_API_KEY Actions secret"; exit 1; }
+
+      - name: Package and Release
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -p 1731951
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

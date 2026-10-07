@@ -1,0 +1,14 @@
+package-as: GroupGuard
+
+enable-nolib-creation: no
+
+ignore:
+  - .git*
+  - .github
+  - tests
+  - "*.zip"
+  - .pkgmeta
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown

@@ -1,0 +1,9 @@
+## Interface: 120100, 50504, 11508
+## Title: GroupGuard
+## Notes: Shows whether your expected five players are exactly in the selected raid group.
+## Author: Teenis Lightbringer-US
+## Version: 1.0.0
+## Category: Utility
+## SavedVariablesPerCharacter: GroupGuardDB
+
+GroupGuard.lua
