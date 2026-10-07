@@ -1,4 +1,4 @@
-## Interface: 120100, 50504, 11508
+## Interface: 120100, 120105
 ## Title: GroupGuard
 ## Notes: Shows whether your expected five players are exactly in the selected raid group.
 ## Author: Teenis Lightbringer-US
