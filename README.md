@@ -27,10 +27,4 @@ The roster, target group, indicator visibility, and position are saved per chara
 
 ## Releases
 
-GitHub Actions validates pushes and pull requests. Publishing runs when a `v*` tag is pushed, for example `v1.0.0`, and creates a GitHub release plus a CurseForge upload through BigWigs Packager.
-
-The CurseForge project ID is configured in the release workflow. Before releasing, add this Actions secret in the GitHub repository:
-
-- `CF_API_KEY`: an API token from the CurseForge author portal.
-
-Update `## Version:` in `GroupGuard.toc` and add the release notes to `CHANGELOG.md` before pushing each version tag. The manual release workflow also requires `CF_API_KEY`.
+Download the latest version from [CurseForge](https://www.curseforge.com/wow/addons/groupguard).
