@@ -4,8 +4,8 @@ set -euo pipefail
 addon_name=GroupGuard
 toc_file="${addon_name}.toc"
 
-if [[ "$(basename "$PWD")" != "$addon_name" ]]; then
-    echo "Expected addon directory '$addon_name', got '$(basename "$PWD")'." >&2
+if [[ ! -f .pkgmeta ]] || ! grep -Fxq "package-as: $addon_name" .pkgmeta; then
+    echo "Expected .pkgmeta to set package-as: $addon_name." >&2
     exit 1
 fi
 
